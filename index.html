@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123c32">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<title>My Salah Tracker</title>
+<style>
+:root{--green:#123c32;--green2:#1d5a49;--mint:#e8f4ed;--gold:#d7b56d;--ink:#18251f;--muted:#6d7b73;--paper:#f6f8f5;--white:#fff;--line:#e0e8e2}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Bengali",sans-serif}
+header{background:linear-gradient(135deg,#10392f,#24624e);color:white;padding:25px 18px 30px;border-radius:0 0 26px 26px}
+.wrap{max-width:760px;margin:auto} .eyebrow{font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:#d9e9df}
+h1{margin:7px 0 6px;font-size:27px;line-height:1.25}header p{margin:0;color:#e0eee6;font-size:14px;line-height:1.6}
+main{max-width:760px;margin:-14px auto 0;padding:0 14px 30px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 5px 18px rgba(20,55,42,.045)}
+.date-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.date-row input{flex:1;min-width:140px;padding:11px;border:1px solid var(--line);border-radius:11px;font:inherit;color:var(--ink);background:white}
+.today-btn{border:0;border-radius:11px;padding:11px 13px;background:var(--mint);color:var(--green);font-weight:700}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}h2{font-size:17px;margin:0}.small{font-size:12px;color:var(--muted)}
+.prayer{display:flex;align-items:center;gap:12px;padding:13px 11px;border:1px solid var(--line);border-radius:14px;margin:9px 0;transition:.15s}
+.prayer.done{background:#f0f8f2;border-color:#b6d9c1}.prayer .symbol{width:39px;height:39px;display:grid;place-items:center;background:#f0f4f0;border-radius:12px;font-size:20px}
+.prayer.done .symbol{background:#d8efdf}.prayer .name{font-weight:750}.prayer .arabic{font-size:12px;color:var(--muted);margin-top:2px}
+.prayer input{width:24px;height:24px;accent-color:var(--green);margin-left:auto;flex-shrink:0}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.count{font-size:24px;font-weight:800;color:var(--green)}.bar{height:9px;background:#e9eee9;border-radius:99px;overflow:hidden}.bar-in{height:100%;width:0;background:linear-gradient(90deg,#347b5d,#9bcba7);border-radius:99px;transition:width .2s}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#f7faf7;border-radius:13px;padding:12px 9px}.stat strong{display:block;font-size:20px;color:var(--green)}.stat span{font-size:11px;color:var(--muted)}
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.dow{text-align:center;font-size:11px;color:var(--muted);padding:5px 0}.day{min-height:39px;border:1px solid var(--line);background:white;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:12px;color:var(--ink);padding:4px 0;cursor:pointer}.day.empty{visibility:hidden}.day.selected{outline:2px solid var(--green);border-color:var(--green);font-weight:800}.day.level-0{background:#e53935;color:#fff;border-color:#c62828}.day.level-1{background:rgba(46,139,87,.2);border-color:rgba(46,139,87,.35)}.day.level-2{background:rgba(46,139,87,.4);border-color:rgba(46,139,87,.5)}.day.level-3{background:rgba(46,139,87,.6);border-color:rgba(46,139,87,.65)}.day.level-4{background:rgba(46,139,87,.8);border-color:rgba(46,139,87,.85)}.day.level-5{background:#2e8b57;color:#fff;border-color:#246f46}.day .dot{font-size:8px;line-height:8px;color:var(--green)}
+.note{font-size:12px;line-height:1.6;color:var(--muted)}.reset{border:1px solid #e4c6c6;background:#fff7f7;color:#963e3e;padding:10px 12px;border-radius:10px;font:inherit;font-size:12px}
+footer{text-align:center;padding:5px 18px 28px;color:var(--muted);font-size:12px}
+@media(min-width:600px){header{padding:30px 24px 36px}h1{font-size:32px}main{padding:0 20px 35px}.prayer{padding:14px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="eyebrow">My personal worship journal</div>
+<h1>My Salah Tracker 🌙</h1>
+<p>একদিনে এক ধাপ করে এগিয়ে চল। আল্লাহর কাছে ফিরে আসার চেষ্টা কখনো ছোট নয়।</p>
+</div></header>
+<main>
+<section class="card">
+<div class="section-head"><h2>📅 তারিখ নির্বাচন</h2><span class="small">তোর ব্যক্তিগত হিসাব</span></div>
+<div class="date-row"><input type="date" id="datePicker" aria-label="তারিখ নির্বাচন"><button class="today-btn" id="todayBtn">আজ</button></div>
+</section>
+<section class="card">
+<div class="progress-top"><div><h2 id="dayTitle">আজকের নামাজ</h2><div class="small" id="daySubtitle">প্রতিটি ওয়াক্ত আদায়ের পর টিক দে</div></div><div class="count"><span id="doneCount">0</span><span style="font-size:14px;color:var(--muted)"> / 5</span></div></div>
+<div class="bar"><div class="bar-in" id="barIn"></div></div>
+<div id="prayerList"></div>
+
+</section>
+<section class="card">
+<div class="section-head"><h2>📈 মাসের অগ্রগতি</h2><span class="small" id="monthLabel"></span></div>
+<div class="stats">
+<div class="stat"><strong id="totalPrayers">0</strong><span>আদায় করা ওয়াক্ত</span></div>
+<div class="stat"><strong id="fullDays">0</strong><span>৫/৫ সম্পূর্ণ দিন</span></div>
+<div class="stat"><strong id="percent">0%</strong><span>মাসের অগ্রগতি</span></div>
+</div>
+</section>
+<section class="card">
+<div class="section-head"><h2>🗓️ ক্যালেন্ডার</h2><div style="display:flex;gap:6px"><button class="today-btn" id="prevMonth" aria-label="আগের মাস">‹</button><button class="today-btn" id="nextMonth" aria-label="পরের মাস">›</button></div></div>
+<div class="month-grid" id="calendar"></div>
+
+</section>
+<section class="card">
+<div class="section-head"><h2>💾 ডেটা ও সেভ</h2></div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="today-btn" id="exportBtn">হিসাব ডাউনলোড</button><button class="today-btn" id="importBtn">হিসাব ইমপোর্ট</button><input type="file" id="importFile" accept="application/json" hidden><button class="reset" id="resetBtn">সব হিসাব মুছুন</button></div>
+</section>
+</main>
+
+<script>
+const prayers=[{key:"fajr",name:"ফজর",arabic:"Fajr",icon:"🌅"},{key:"dhuhr",name:"যোহর",arabic:"Dhuhr",icon:"☀️"},{key:"asr",name:"আসর",arabic:"Asr",icon:"🌤️"},{key:"maghrib",name:"মাগরিব",arabic:"Maghrib",icon:"🌇"},{key:"isha",name:"এশা",arabic:"Isha",icon:"🌙"}];
+const $=id=>document.getElementById(id);
+const today=new Date(); let viewYear=today.getFullYear(),viewMonth=today.getMonth();
+let data={}; const STORAGE_KEY="mySalahTracker_v1";
+try{data=JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}")}catch(e){data={}}
+const pad=n=>String(n).padStart(2,"0");
+const dateKey=(y,m,d)=>`${y}-${pad(m+1)}-${pad(d)}`;
+const keyNow=()=>dateKey(today.getFullYear(),today.getMonth(),today.getDate());
+function getDay(key){if(!data[key])data[key]={};prayers.forEach(p=>{if(typeof data[key][p.key]!=="boolean")data[key][p.key]=false});return data[key]}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(e){alert("এই ব্রাউজারে সেভ করা যাচ্ছে না। জায়গা খালি করে আবার চেষ্টা কর।")}}
+function countDay(key){const d=getDay(key);return prayers.filter(p=>d[p.key]).length}
+function renderPrayers(){
+ const key=$("datePicker").value||keyNow(),d=getDay(key);
+ $("dayTitle").textContent=key===keyNow()?"আজকের নামাজ":new Date(key+"T12:00:00").toLocaleDateString("bn-BD",{day:"numeric",month:"long",year:"numeric"});
+ $("daySubtitle").textContent=countDay(key)===5?"আলহামদুলিল্লাহ — পাঁচ ওয়াক্তেই টিক দেওয়া হয়েছে":"প্রতিটি ওয়াক্ত আদায়ের পর টিক দে";
+ $("doneCount").textContent=countDay(key);$("barIn").style.width=(countDay(key)/5*100)+"%";
+ $("prayerList").innerHTML="";
+ prayers.forEach(p=>{const row=document.createElement("label");row.className="prayer"+(d[p.key]?" done":"");row.innerHTML=`<span class="symbol">${p.icon}</span><span><span class="name">${p.name}</span><br><span class="arabic">${p.arabic}</span></span><input type="checkbox" aria-label="${p.name} আদায় হয়েছে" ${d[p.key]?"checked":""}>`;row.querySelector("input").addEventListener("change",e=>{getDay(key)[p.key]=e.target.checked;save();renderAll()});$("prayerList").appendChild(row)})
+}
+function renderStats(){
+ const days=new Date(viewYear,viewMonth+1,0).getDate();let total=0,full=0;
+ for(let d=1;d<=days;d++){const k=dateKey(viewYear,viewMonth,d);const c=countDay(k);total+=c;if(c===5)full++}
+ $("totalPrayers").textContent=total;$("fullDays").textContent=full;$("percent").textContent=Math.round(total/(days*5)*100)+"%";
+ $("monthLabel").textContent=new Date(viewYear,viewMonth,1).toLocaleDateString("bn-BD",{month:"long",year:"numeric"});
+}
+function renderCalendar(){
+ const cal=$("calendar");cal.innerHTML="";
+ ["শনি","রবি","সোম","মঙ্গল","বুধ","বৃহঃ","শুক্র"].forEach(x=>{const el=document.createElement("div");el.className="dow";el.textContent=x;cal.appendChild(el)});
+ const first=new Date(viewYear,viewMonth,1).getDay();const offset=(first+1)%7;const days=new Date(viewYear,viewMonth+1,0).getDate();
+ for(let i=0;i<offset;i++){const el=document.createElement("div");el.className="day empty";cal.appendChild(el)}
+ for(let d=1;d<=days;d++){const k=dateKey(viewYear,viewMonth,d),c=countDay(k);const el=document.createElement("button");el.className="day level-"+c+(k===$("datePicker").value?" selected":"");el.innerHTML=`<span>${d}</span>${c?`<span class="dot">${c===5?"✓":c+"/5"}</span>`:""} `;el.setAttribute("aria-label",`${d} তারিখ, ${c} ওয়াক্ত টিক দেওয়া`);el.addEventListener("click",()=>{$("datePicker").value=k;viewYear=new Date(k+"T12:00:00").getFullYear();viewMonth=new Date(k+"T12:00:00").getMonth();renderAll()});cal.appendChild(el)}
+}
+function renderAll(){renderPrayers();renderStats();renderCalendar()}
+$("datePicker").value=keyNow();
+$("datePicker").addEventListener("change",()=>{const dt=new Date($("datePicker").value+"T12:00:00");if(!isNaN(dt)){viewYear=dt.getFullYear();viewMonth=dt.getMonth();renderAll()}});
+$("todayBtn").addEventListener("click",()=>{$("datePicker").value=keyNow();viewYear=today.getFullYear();viewMonth=today.getMonth();renderAll()});
+$("prevMonth").addEventListener("click",()=>{viewMonth--;if(viewMonth<0){viewMonth=11;viewYear--}renderAll()});
+$("nextMonth").addEventListener("click",()=>{viewMonth++;if(viewMonth>11){viewMonth=0;viewYear++}renderAll()});
+$("exportBtn").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="my-salah-tracker-backup.json";a.click();URL.revokeObjectURL(url)});
+$("importBtn").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{const imported=JSON.parse(await f.text());if(!imported||typeof imported!=="object"||Array.isArray(imported))throw Error();data={...data,...imported};save();renderAll();alert("হিসাব ইমপোর্ট হয়েছে।")}catch(err){alert("ফাইলটি সঠিক নয়।")}e.target.value=""});
+$("resetBtn").addEventListener("click",()=>{if(confirm("সত্যিই কি সব নামাজের হিসাব মুছে ফেলতে চাস? আগে চাইলে হিসাব ডাউনলোড করে রাখ।")){data={};save();renderAll()}});
+renderAll();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
